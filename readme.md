@@ -1,24 +1,16 @@
+# Eventy
+Eventy is a web application that allows you to manage the process of organizing different types of events.
 
-
-## Description
-
-simple employee management system 
-
-## Demo
-https://simple-employee-man.herokuapp.com/list
-
+## Informations:
+- Status : in development
+- Lastest version : 1.0
+- Sector: service
+- Created: October 2020
+- Last updated: October 2020
   
-## Screenshots
-<p align="center">
-
-![enter image description here](employee-management.JPG)
-
-</p>
-
-## Source code
-https://github.com/aniskchaou/EMPLOYEE-MANAGEMENT-NODEJS 
-  
-
-## Technologies
-
-Node Js, Express, Node-postgres, Express-handlebars
+## Modules: 
+- Manage reservations
+- Manage events
+- Manage categories
+- Manage users
+- Add products to the favorites list
