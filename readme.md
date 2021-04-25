@@ -35,7 +35,7 @@ https://eventy-client.herokuapp.com/
 
 ## Screenshots
 <p align="center">
-<img  src="screenshots/screenshot.png"/>
+<img  src="screenshots/screenshot.PNG"/>
 <p>
 
 ## Technologies
