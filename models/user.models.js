@@ -4,7 +4,11 @@ var Sequelize = require('sequelize');
 
 var User = sequelize.define('user', {
     username: Sequelize.STRING,
-    birthday: Sequelize.DATE
+    email: Sequelize.STRING,
+    telephone: Sequelize.STRING,
+    firstName: Sequelize.STRING,
+    lastNme: Sequelize.STRING,
+    password: Sequelize.STRING
 });
 
 

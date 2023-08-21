@@ -1,37 +1,20 @@
 
-var User = require("../../models/user.models")
+var Sponser = require("../../models/sponser.models")
 
-exports.login = (req, res) => {
 
-    if (!req.body) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
-        return;
-    }
-    const user = {
-        username: req.body.username,
-        password: req.body.password,
+exports.getCount = (req, res) => {
 
-    }
-
-    User.findOne({ where: { username: user.username, password: user.password } })
+    Sponser.count()
         .then(data => {
-
-            if (data === null) {
-                res.send({});
-            } else {
-                res.send(data);
-            }
-
-        })
-        .catch(err => {
+            res.send({ 'sponser': data })
+        }).catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while creating the User."
+                    err.message || "Some error occurred while retrieving users."
             });
         });
-};
+
+}
 
 exports.create = (req, res) => {
     // Validate request
@@ -42,24 +25,23 @@ exports.create = (req, res) => {
          return;
      } */
 
-    // Create a user
-    const user = {
-        username: req.body.username,
+    // Create a sponser
+    const sponser = {
+        name: req.body.name,
         email: req.body.email,
-        telephone: req.body.telephone,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName
+        website: req.body.website,
+        telephone: req.body.telephone
     }
 
-    // Save user in the database
-    User.create(user)
+    // Save sponser in the database
+    Sponser.create(sponser)
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while creating the User."
+                    err.message || "Some error occurred while creating the Sponser."
             });
         });
 };
@@ -70,7 +52,7 @@ exports.findAll = (req, res) => {
     const username = req.query.username;
     var condition = username ? { username: { [Op.like]: `%${username}%` } } : null;
 
-    User.findAll({ where: condition })
+    Sponser.findAll({ where: condition })
         .then(data => {
             res.send(data);
         })
@@ -86,13 +68,13 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
-    User.findByPk(id)
+    Sponser.findByPk(id)
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving User with id=" + id
+                message: "Error retrieving Sponser with id=" + id
             });
         });
 };
@@ -102,23 +84,23 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
     const id = req.params.id;
     console.log(req.body)
-    User.update(req.body, {
+    Sponser.update(req.body, {
         where: { id: id }
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "User was updated successfully."
+                    message: "Sponser was updated successfully."
                 });
             } else {
                 res.send({
-                    message: `Cannot update User with id=${id}. Maybe User was not found or req.body is empty!`
+                    message: `Cannot update Sponser with id=${id}. Maybe Sponser was not found or req.body is empty!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating User with id=" + id
+                message: "Error updating Sponser with id=" + id
             });
         });
 };
@@ -127,35 +109,35 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-    User.destroy({
+    Sponser.destroy({
         where: { id: id }
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "User was deleted successfully!"
+                    message: "Sponser was deleted successfully!"
                 });
             } else {
                 res.send({
-                    message: `Cannot delete User with id=${id}. Maybe User was not found!`
+                    message: `Cannot delete Sponser with id=${id}. Maybe Sponser was not found!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete User with id=" + id
+                message: "Could not delete Sponser with id=" + id
             });
         });
 };
 
 
 exports.deleteAll = (req, res) => {
-    User.destroy({
+    Sponser.destroy({
         where: {},
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} User were deleted successfully!` });
+            res.send({ message: `${nums} Sponser were deleted successfully!` });
         })
         .catch(err => {
             res.status(500).send({

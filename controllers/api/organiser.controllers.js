@@ -1,37 +1,19 @@
 
-var User = require("../../models/user.models")
+var Organiser = require("../../models/organiser.models")
 
-exports.login = (req, res) => {
+exports.getCount = (req, res) => {
 
-    if (!req.body) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
-        return;
-    }
-    const user = {
-        username: req.body.username,
-        password: req.body.password,
-
-    }
-
-    User.findOne({ where: { username: user.username, password: user.password } })
+    Organiser.count()
         .then(data => {
-
-            if (data === null) {
-                res.send({});
-            } else {
-                res.send(data);
-            }
-
-        })
-        .catch(err => {
+            res.send({ 'organiser': data })
+        }).catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while creating the User."
+                    err.message || "Some error occurred while retrieving users."
             });
         });
-};
+
+}
 
 exports.create = (req, res) => {
     // Validate request
@@ -42,24 +24,22 @@ exports.create = (req, res) => {
          return;
      } */
 
-    // Create a user
-    const user = {
-        username: req.body.username,
-        email: req.body.email,
-        telephone: req.body.telephone,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName
+    // Create a organiser
+    const organiser = {
+        name: req.body.name,
+        phone: req.body.phone,
+        email: req.body.email
     }
 
-    // Save user in the database
-    User.create(user)
+    // Save organiser in the database
+    Organiser.create(organiser)
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while creating the User."
+                    err.message || "Some error occurred while creating the Organiser."
             });
         });
 };
@@ -70,7 +50,7 @@ exports.findAll = (req, res) => {
     const username = req.query.username;
     var condition = username ? { username: { [Op.like]: `%${username}%` } } : null;
 
-    User.findAll({ where: condition })
+    Organiser.findAll({ where: condition })
         .then(data => {
             res.send(data);
         })
@@ -86,13 +66,13 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
-    User.findByPk(id)
+    Organiser.findByPk(id)
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving User with id=" + id
+                message: "Error retrieving Organiser with id=" + id
             });
         });
 };
@@ -102,23 +82,23 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
     const id = req.params.id;
     console.log(req.body)
-    User.update(req.body, {
+    Organiser.update(req.body, {
         where: { id: id }
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "User was updated successfully."
+                    message: "Organiser was updated successfully."
                 });
             } else {
                 res.send({
-                    message: `Cannot update User with id=${id}. Maybe User was not found or req.body is empty!`
+                    message: `Cannot update Organiser with id=${id}. Maybe Organiser was not found or req.body is empty!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating User with id=" + id
+                message: "Error updating Organiser with id=" + id
             });
         });
 };
@@ -127,35 +107,35 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-    User.destroy({
+    Organiser.destroy({
         where: { id: id }
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "User was deleted successfully!"
+                    message: "Organiser was deleted successfully!"
                 });
             } else {
                 res.send({
-                    message: `Cannot delete User with id=${id}. Maybe User was not found!`
+                    message: `Cannot delete Organiser with id=${id}. Maybe Organiser was not found!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete User with id=" + id
+                message: "Could not delete Organiser with id=" + id
             });
         });
 };
 
 
 exports.deleteAll = (req, res) => {
-    User.destroy({
+    Organiser.destroy({
         where: {},
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} User were deleted successfully!` });
+            res.send({ message: `${nums} Organiser were deleted successfully!` });
         })
         .catch(err => {
             res.status(500).send({

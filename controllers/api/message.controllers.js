@@ -1,37 +1,7 @@
 
-var User = require("../../models/user.models")
+var Message = require("../../models/message.models")
 
-exports.login = (req, res) => {
 
-    if (!req.body) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
-        return;
-    }
-    const user = {
-        username: req.body.username,
-        password: req.body.password,
-
-    }
-
-    User.findOne({ where: { username: user.username, password: user.password } })
-        .then(data => {
-
-            if (data === null) {
-                res.send({});
-            } else {
-                res.send(data);
-            }
-
-        })
-        .catch(err => {
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the User."
-            });
-        });
-};
 
 exports.create = (req, res) => {
     // Validate request
@@ -42,24 +12,23 @@ exports.create = (req, res) => {
          return;
      } */
 
-    // Create a user
-    const user = {
-        username: req.body.username,
+    // Create a message
+    const message = {
+        name: req.body.name,
         email: req.body.email,
-        telephone: req.body.telephone,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName
+        subject: req.body.subject,
+        message: req.body.message
     }
 
-    // Save user in the database
-    User.create(user)
+    // Save message in the database
+    Message.create(message)
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while creating the User."
+                    err.message || "Some error occurred while creating the Message."
             });
         });
 };
@@ -70,7 +39,7 @@ exports.findAll = (req, res) => {
     const username = req.query.username;
     var condition = username ? { username: { [Op.like]: `%${username}%` } } : null;
 
-    User.findAll({ where: condition })
+    Message.findAll({ where: condition })
         .then(data => {
             res.send(data);
         })
@@ -86,13 +55,13 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
-    User.findByPk(id)
+    Message.findByPk(id)
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving User with id=" + id
+                message: "Error retrieving Message with id=" + id
             });
         });
 };
@@ -102,23 +71,23 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
     const id = req.params.id;
     console.log(req.body)
-    User.update(req.body, {
+    Message.update(req.body, {
         where: { id: id }
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "User was updated successfully."
+                    message: "Message was updated successfully."
                 });
             } else {
                 res.send({
-                    message: `Cannot update User with id=${id}. Maybe User was not found or req.body is empty!`
+                    message: `Cannot update Message with id=${id}. Maybe Message was not found or req.body is empty!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating User with id=" + id
+                message: "Error updating Message with id=" + id
             });
         });
 };
@@ -127,35 +96,35 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-    User.destroy({
+    Message.destroy({
         where: { id: id }
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "User was deleted successfully!"
+                    message: "Message was deleted successfully!"
                 });
             } else {
                 res.send({
-                    message: `Cannot delete User with id=${id}. Maybe User was not found!`
+                    message: `Cannot delete Message with id=${id}. Maybe Message was not found!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete User with id=" + id
+                message: "Could not delete Message with id=" + id
             });
         });
 };
 
 
 exports.deleteAll = (req, res) => {
-    User.destroy({
+    Message.destroy({
         where: {},
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} User were deleted successfully!` });
+            res.send({ message: `${nums} Message were deleted successfully!` });
         })
         .catch(err => {
             res.status(500).send({
